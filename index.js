@@ -107,10 +107,31 @@ async function run() {
         app.get ('/allToys', async (req, res) => { 
 
 
-            const result = await allToys.find().toArray();
+            const result = await allToys.find().limit(20).toArray();
 
             res.send (result);
 
+
+
+
+        })
+
+
+        app.get ('/allToys/:text', async (req, res) => { 
+
+            const text = req.params.text
+
+
+            const result = await allToys.find ({
+
+                $or: [
+                    { name: { $regex: text, $options: "i" } },
+                  ]
+
+
+            }).toArray()
+
+            res.send (result)
 
 
 
