@@ -114,28 +114,63 @@ async function run() {
 
 
 
+
+
         })
+        
+        app.get ('/allToys/:id', async (req, res) => { 
 
 
-        app.get ('/allToys/:text', async (req, res) => { 
-
-            const text = req.params.text
-
-
-            const result = await allToys.find ({
-
-                $or: [
-                    { name: { $regex: text, $options: "i" } },
-                  ]
-
-
-            }).toArray()
-
+            const id = req.params.id;
+      
+      
+            const query = { _id : new ObjectId(id) };
+      
+      
+            const result = await allToys.findOne(query);
+      
             res.send (result)
+      
+      
+           })
 
 
 
-        })
+           app.get('/allToys/:email', async (req, res) => {
+            console.log(req.params.email);
+           
+          });
+
+          
+
+
+          app.get ('/allToys', async (req, res) => {
+            let  query = {}
+    
+    
+           if (req.query?.email) {
+    
+    
+    
+            query = { selleremail: req.query.email}
+           }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+            const cursor = allToys.find (query);
+    
+            const result = await cursor.toArray()
+    
+            res.send (result)
+          })
+           
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
