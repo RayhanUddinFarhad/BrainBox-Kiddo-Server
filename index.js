@@ -93,7 +93,7 @@ async function run() {
             const result = await allToys.insertOne(query)
 
 
-            res.send (result);
+            res.send(result);
 
 
 
@@ -104,12 +104,12 @@ async function run() {
 
         })
 
-        app.get ('/allToys', async (req, res) => { 
+        app.get('/allToys', async (req, res) => {
 
 
             const result = await allToys.find().limit(20).toArray();
 
-            res.send (result);
+            res.send(result);
 
 
 
@@ -117,60 +117,88 @@ async function run() {
 
 
         })
-        
-        app.get ('/allToys/:id', async (req, res) => { 
 
 
-            const id = req.params.id;
-      
-      
-            const query = { _id : new ObjectId(id) };
-      
-      
-            const result = await allToys.findOne(query);
-      
-            res.send (result)
-      
-      
-           })
+        // app.get('/allToys', async (req, res) => {
+        //     let query = {}
+
+
+        //     if (req.query?.email) {
 
 
 
-           app.get('/allToys/:email', async (req, res) => {
-            console.log(req.params.email);
-           
+        //         query = { selleremail: req.query.email }
+        //     }
+
+
+
+
+
+
+
+
+        //     const cursor = allToys.find(query);
+
+        //     const result = await cursor.toArray()
+
+        //     res.send(result)
+        // })
+
+        app.get ('/ToysbySeach/:text', async (req, res) => { 
+
+
+
+
+            const text = req.params.text;
+
+
+            const result = await allToys.find({
+                
+                $or: [
+                { name: { $regex: text, $options: "i" } },
+              ]}).toArray();
+
+            res.send (result);
+          })
+
+
+
+
+
+
+        app.get('/Toysbyemail/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { selleremail: email };
+            const result = await allToys.find(query).toArray();
+            res.send(result);
           });
 
           
 
+        app.get('/allToys/:id', async (req, res) => {
 
-          app.get ('/allToys', async (req, res) => {
-            let  query = {}
-    
-    
-           if (req.query?.email) {
-    
-    
-    
-            query = { selleremail: req.query.email}
-           }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-            const cursor = allToys.find (query);
-    
-            const result = await cursor.toArray()
-    
-            res.send (result)
-          })
-           
+
+            const id = req.params.id;
+
+
+            const query = { _id: new ObjectId(id) };
+
+
+            const result = await allToys.findOne(query);
+
+            res.send(result)
+
+
+        })
+
+
+
+
+
+
+
+       
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
