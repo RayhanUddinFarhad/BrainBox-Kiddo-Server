@@ -42,14 +42,14 @@ async function run() {
 
 
 
-        app.get('/toys/:category', async (req, res) => {
+        // app.get('/toys/:category', async (req, res) => {
 
 
 
 
-            const result = await toys2.find({ category: req.params.category }).toArray();
-            res.send(result);
-        })
+        //     const result = await toys2.find({ category: req.params.category }).toArray();
+        //     res.send(result);
+        // })
 
         app.get('/toysbycategory', async (req, res) => {
 
@@ -188,6 +188,29 @@ async function run() {
             const result = await allToys.updateOne (filter, updateDoc, options)
             res.send (result)
         })
+
+        app.get('/toys/:category', async (req, res) => {
+
+
+
+
+            const result = await allToys.find({ selectedSubCategory: req.params.category }).toArray();
+            res.send(result);
+        })
+
+        app.delete ('/deleteToy/:id', async (req, res) => {
+
+
+
+            const id = req.params.id;
+            const query =  { _id : new ObjectId (id) };
+
+
+            const result = await allToys.deleteOne(query)
+
+            res.send (result);
+           })
+
 
 
 
@@ -387,19 +410,7 @@ async function run() {
 
 
 
-        //   app.delete ('/deleteToy/:id', async (req, res) => {
-
-
-
-        //     const id = req.params.id;
-        //     const query =  { _id : new ObjectId (id) };
-
-
-        //     const result = await allToys.deleteOne(query)
-
-        //     res.send (result);
-        //    })
-
+        
 
 
 
