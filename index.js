@@ -118,6 +118,71 @@ async function run() {
 
         })
 
+        app.get('/allToys/:id', async (req, res) => {
+
+
+            const id = req.params.id;
+
+
+            const query = { _id: new ObjectId(id) };
+
+
+            const result = await allToys.findOne(query);
+
+            res.send(result)
+
+
+        })
+
+        app.get('/allToys/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { selleremail: email };
+            const result = await allToys.find(query).toArray();
+            res.send(result);
+          });
+
+
+          app.put ('/allToys/:id', async (req, res) => {
+
+
+            const id = req.params.id;
+            const body = req.body;
+            const filter = {
+
+                _id : new ObjectId (id)
+            }
+
+                const options = { upsert: true };
+
+                const updateDoc = {
+
+
+                    $set: {
+                        price: body.price,
+                        quantity: body.quantity,
+                        description: body.description,
+                          },
+
+
+                   
+                  
+
+
+                }
+
+
+                const result = await allToys.updateOne (filter, updateDoc, options)
+
+                res.send (result)
+
+
+
+
+
+            
+           })
+          
+
 
         // app.get('/allToys', async (req, res) => {
         //     let query = {}
@@ -166,12 +231,7 @@ async function run() {
 
 
 
-        app.get('/Toysbyemail/:email', async (req, res) => {
-            const email = req.params.email;
-            const query = { selleremail: email };
-            const result = await allToys.find(query).toArray();
-            res.send(result);
-          });
+       
 
 
           app.delete ('/deleteToy/:id', async (req, res) => {
@@ -187,23 +247,11 @@ async function run() {
             res.send (result);
            })
 
+           
+
           
 
-        app.get('/allToys/:id', async (req, res) => {
-
-
-            const id = req.params.id;
-
-
-            const query = { _id: new ObjectId(id) };
-
-
-            const result = await allToys.findOne(query);
-
-            res.send(result)
-
-
-        })
+       
 
 
 
