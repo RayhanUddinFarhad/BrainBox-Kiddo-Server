@@ -68,7 +68,8 @@ async function run() {
         const allToys = database.collection('AllToys');
 
 
-        app.post('/allToys', async (req, res) => {
+
+        app.post ('/allToys', async (req, res) => { 
 
 
 
@@ -86,145 +87,232 @@ async function run() {
                 quantity: body.quantity,
                 description: body.description,
                 selectedSubCategory: body.selectedSubCategory,
+
+
             }
-
-
 
             const result = await allToys.insertOne(query)
 
-
-            res.send(result);
-
+            res.send (result)
 
 
-
-
-
-
-
+            
         })
 
-        app.get('/allToys', async (req, res) => {
-
-
-            const result = await allToys.find().limit(20).toArray();
-
-            res.send(result);
+        app.get ('/allToys', async (req, res) => {
 
 
 
+            const result = await allToys.find().toArray()
+
+            res.send (result)
+         })
+
+
+         app.get ('/allToys/:email', async (req, res) => { 
+
+
+            const email = req.params.email
+
+            const result = await allToys.find ({
+
+                selleremail : email,
+
+                
+            }).toArray();
+
+            res.send (result)
+         })
 
 
 
-        })
-
-        app.get('/allToys/:id', async (req, res) => {
 
 
-            const id = req.params.id;
 
 
-            const query = { _id: new ObjectId(id) };
 
 
-            const result = await allToys.findOne(query);
-
-            res.send(result)
 
 
-        })
-
-        app.get('/allToys/:email', async (req, res) => {
-            const email = req.params.email;
-            const query = { selleremail: email };
-            const result = await allToys.find(query).toArray();
-            res.send(result);
-          });
 
 
-          app.put ('/allToys/:id', async (req, res) => {
 
 
-            const id = req.params.id;
-            const body = req.body;
-            const filter = {
-
-                _id : new ObjectId (id)
-            }
-
-                const options = { upsert: true };
-
-                const updateDoc = {
 
 
-                    $set: {
-                        price: body.price,
-                        quantity: body.quantity,
-                        description: body.description,
-                          },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // app.post('/allToys/:email', async (req, res) => {
+
+
+
+        //     const body = req.body;
+
+        //     const query = {
+
+
+        //         name: body.name,
+        //         photo: body.photo,
+        //         Sellername: body.Sellername,
+        //         selleremail: body.selleremail,
+        //         price: body.price,
+        //         rating: body.rating,
+        //         quantity: body.quantity,
+        //         description: body.description,
+        //         selectedSubCategory: body.selectedSubCategory,
+        //     }
+
+
+
+        //     const result = await allToys.insertOne(query)
+
+
+        //     res.send(result);
+
+
+
+
+
+
+
+
+        // })
+
+        // app.get('/allToys', async (req, res) => {
+
+
+        //     const result = await allToys.find().limit(20).toArray();
+
+        //     res.send(result);
+
+
+
+
+
+
+        // })
+
+        // app.get('/allToys/:id', async (req, res) => {
+
+
+        //     const id = req.params.id;
+
+
+        //     const query = { _id: new ObjectId(id) };
+
+
+        //     const result = await allToys.findOne(query);
+
+        //     res.send(result)
+
+
+        // })
+
+        // app.get('/allToys/seller/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const query = { selleremail: email };
+        //     const result = await allToys.find(query).toArray();
+        //     res.send(result);
+        //   });
+
+
+        //   app.put ('/allToys/:id', async (req, res) => {
+
+
+        //     const id = req.params.id;
+        //     const body = req.body;
+        //     const filter = {
+
+        //         _id : new ObjectId (id)
+        //     }
+
+        //         const options = { upsert: true };
+
+        //         const updateDoc = {
+
+
+        //             $set: {
+        //                 price: body.price,
+        //                 quantity: body.quantity,
+        //                 description: body.description,
+        //                   },
 
 
                    
                   
 
 
-                }
+        //         }
 
 
-                const result = await allToys.updateOne (filter, updateDoc, options)
+        //         const result = await allToys.updateOne (filter, updateDoc, options)
 
-                res.send (result)
+        //         res.send (result)
 
 
 
 
 
             
-           })
+        //    })
           
 
 
-        // app.get('/allToys', async (req, res) => {
-        //     let query = {}
+        // // app.get('/allToys', async (req, res) => {
+        // //     let query = {}
 
 
-        //     if (req.query?.email) {
-
-
-
-        //         query = { selleremail: req.query.email }
-        //     }
+        // //     if (req.query?.email) {
 
 
 
+        // //         query = { selleremail: req.query.email }
+        // //     }
 
 
 
 
 
-        //     const cursor = allToys.find(query);
-
-        //     const result = await cursor.toArray()
-
-        //     res.send(result)
-        // })
-
-        app.get ('/ToysbySeach/:text', async (req, res) => { 
 
 
 
+        // //     const cursor = allToys.find(query);
 
-            const text = req.params.text;
+        // //     const result = await cursor.toArray()
+
+        // //     res.send(result)
+        // // })
+
+        // app.get ('/ToysbySeach/:text', async (req, res) => { 
 
 
-            const result = await allToys.find({
+
+
+        //     const text = req.params.text;
+
+
+        //     const result = await allToys.find({
                 
-                $or: [
-                { name: { $regex: text, $options: "i" } },
-              ]}).toArray();
+        //         $or: [
+        //         { name: { $regex: text, $options: "i" } },
+        //       ]}).toArray();
 
-            res.send (result);
-          })
+        //     res.send (result);
+        //   })
 
 
 
@@ -234,18 +322,18 @@ async function run() {
        
 
 
-          app.delete ('/deleteToy/:id', async (req, res) => {
+        //   app.delete ('/deleteToy/:id', async (req, res) => {
 
 
 
-            const id = req.params.id;
-            const query =  { _id : new ObjectId (id) };
+        //     const id = req.params.id;
+        //     const query =  { _id : new ObjectId (id) };
 
 
-            const result = await allToys.deleteOne(query)
+        //     const result = await allToys.deleteOne(query)
 
-            res.send (result);
-           })
+        //     res.send (result);
+        //    })
 
            
 
