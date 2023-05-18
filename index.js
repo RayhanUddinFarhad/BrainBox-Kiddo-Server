@@ -69,7 +69,7 @@ async function run() {
 
 
 
-        app.post ('/allToys', async (req, res) => { 
+        app.post('/allToys', async (req, res) => {
 
 
 
@@ -93,36 +93,101 @@ async function run() {
 
             const result = await allToys.insertOne(query)
 
-            res.send (result)
+            res.send(result)
 
 
-            
+
         })
 
-        app.get ('/allToys', async (req, res) => {
+        app.get('/allToys', async (req, res) => {
 
 
 
             const result = await allToys.find().toArray()
 
-            res.send (result)
-         })
+            res.send(result)
+        })
 
 
-         app.get ('/allToys/:email', async (req, res) => { 
+        app.get('/allToys/:email', async (req, res) => {
 
 
             const email = req.params.email
 
-            const result = await allToys.find ({
+            const result = await allToys.find({
 
-                selleremail : email,
+                selleremail: email,
 
-                
+
             }).toArray();
 
+            res.send(result)
+        })
+
+        app.get('/search/:name', async (req, res) => {
+
+            const name = req.params.name
+            const result = await allToys.find({
+
+                $or: [
+                    { name: { $regex: name, $options: "i" } },
+                ]
+            }).toArray();
+
+            res.send(result)
+
+
+
+        })
+
+
+        app.get('/getone/:id', async (req, res) => {
+
+
+            const id = req.params.id;
+
+            const query = {
+
+                _id: new ObjectId(id)
+            }
+
+            const result = await allToys.findOne(query)
+
+            res.send(result)
+
+
+
+        })
+
+        app.put ('/getone/:id', async (req, res) => {
+
+
+            const id = req.params.id
+
+            const body = req.body
+
+            const filter = { _id : new ObjectId (id)}
+
+            const options = { upsert: true };
+
+            const updateDoc = {
+
+                $set : {
+
+
+                    price: body.price,
+                                    quantity: body.quantity,
+                                    description: body.description,
+                }
+
+
+
+            }
+
+
+            const result = await allToys.updateOne (filter, updateDoc, options)
             res.send (result)
-         })
+        })
 
 
 
@@ -252,8 +317,8 @@ async function run() {
         //                   },
 
 
-                   
-                  
+
+
 
 
         //         }
@@ -267,9 +332,9 @@ async function run() {
 
 
 
-            
+
         //    })
-          
+
 
 
         // // app.get('/allToys', async (req, res) => {
@@ -306,7 +371,7 @@ async function run() {
 
 
         //     const result = await allToys.find({
-                
+
         //         $or: [
         //         { name: { $regex: text, $options: "i" } },
         //       ]}).toArray();
@@ -319,7 +384,7 @@ async function run() {
 
 
 
-       
+
 
 
         //   app.delete ('/deleteToy/:id', async (req, res) => {
@@ -335,11 +400,6 @@ async function run() {
         //     res.send (result);
         //    })
 
-           
-
-          
-
-       
 
 
 
@@ -347,7 +407,12 @@ async function run() {
 
 
 
-       
+
+
+
+
+
+
 
 
         // Send a ping to confirm a successful connection
