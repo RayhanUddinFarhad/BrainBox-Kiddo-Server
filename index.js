@@ -103,7 +103,7 @@ async function run() {
 
 
 
-            const result = await allToys.find().toArray()
+            const result = await allToys.find().limit(20).toArray()
 
             res.send(result)
         })
@@ -123,6 +123,85 @@ async function run() {
 
             res.send(result)
         })
+
+        app.get ('/lowest/:email', async (req, res) => { 
+
+
+            
+            const email = req.params.email
+
+            const result = await allToys.find(
+                
+               
+                
+                
+                {
+
+                selleremail: email,
+                
+
+
+            },
+
+            {
+                sort: { price: 1 },
+
+            }
+            
+            
+            
+            ).toArray();
+
+            res.send(result)
+
+
+
+
+
+      
+
+        })
+
+
+        app.get ('/highest/:email', async (req, res) => { 
+
+
+            
+            const email = req.params.email
+
+            const result = await allToys.find(
+                
+               
+                
+                
+                {
+
+                selleremail: email,
+                
+
+
+            },
+
+            {
+                sort: { price: -1 },
+
+            }
+            
+            
+            
+            ).toArray();
+
+            res.send(result)
+
+
+
+
+
+      
+
+        })
+
+        
 
         app.get('/search/:name', async (req, res) => {
 
